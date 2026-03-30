@@ -18,7 +18,7 @@ const Career = () => {
                 <h4>B.Tech in EEE</h4>
                 <h5>SRM Institute of Science & Tech</h5>
               </div>
-              <h3>2020</h3>
+              <h5>2020</h5>
             </div>
             <p>
               Graduated with a CGPA of 9.67/10. Built strong foundations in problem solving and complex systems engineering.
@@ -30,7 +30,7 @@ const Career = () => {
                 <h4>Assistant System Engineer</h4>
                 <h5>Tata Consultancy Services</h5>
               </div>
-              <h3>Jul 2021 - Oct 2022</h3>
+              <h5>Jan 2021 - Jul 2022</h5>
             </div>
             <p>
               Owned ETL delivery using Azure Data Factory, and developed Databricks notebooks for complex transformations.
@@ -43,7 +43,7 @@ const Career = () => {
                 <h4>Senior Backend Engineer (SDE II)</h4>
                 <h5>Masters India IT Solutions</h5>
               </div>
-              <h3>Oct 2022 - PRESENT</h3>
+              <h5>Jul 2022 - PRESENT</h5>
             </div>
             <p>
               Owned production-grade REST APIs processing 500k+ daily events. Architected event-driven pipelines using Kafka,
