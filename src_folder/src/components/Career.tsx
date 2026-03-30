@@ -21,8 +21,7 @@ const Career = () => {
               <h3>2020</h3>
             </div>
             <p>
-              Graduated with a CGPA of 9.67/10. Built foundational knowledge in problem solving
-              and complex systems engineering.
+              Graduated with a CGPA of 9.67/10. Built strong foundations in problem solving and complex systems engineering.
             </p>
           </div>
           <div className="career-info-box">
@@ -31,11 +30,11 @@ const Career = () => {
                 <h4>Assistant System Engineer</h4>
                 <h5>Tata Consultancy Services</h5>
               </div>
-              <h3>2021</h3>
+              <h3>Jul 2021 - Oct 2022</h3>
             </div>
             <p>
-              Designed and implemented ETL pipelines using Azure Data Factory. Developed
-              Databricks notebooks for complex data transformations and streamlined Python testing via Jenkins CI/CD automation.
+              Owned ETL delivery using Azure Data Factory, and developed Databricks notebooks for complex transformations.
+              Streamlined Python testing and releases via Jenkins CI/CD to improve reliability and iteration speed.
             </p>
           </div>
           <div className="career-info-box">
@@ -44,11 +43,12 @@ const Career = () => {
                 <h4>Senior Backend Engineer (SDE II)</h4>
                 <h5>Masters India IT Solutions</h5>
               </div>
-              <h3>NOW</h3>
+              <h3>Oct 2022 - PRESENT</h3>
             </div>
             <p>
-              Building production-grade REST APIs processing 500K+ daily events. Architected
-              event-driven pipelines using Kafka and production RAG pipelines using LangChain and Qdrant vector DB.
+              Owned production-grade REST APIs processing 500k+ daily events. Architected event-driven pipelines using Kafka,
+              and built RAG pipelines using LangChain with Qdrant for fast, context-aware retrieval.
+              Collaborated across teams to improve SLO predictability and reduce operational friction in production systems.
             </p>
           </div>
         </div>

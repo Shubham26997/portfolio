@@ -9,10 +9,17 @@ export default function handleResize(
   character: THREE.Object3D
 ) {
   if (!canvasDiv.current) return;
-  let canvas3d = canvasDiv.current.getBoundingClientRect();
+
+  const prefersReducedMotion =
+    typeof window !== "undefined" &&
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const canvas3d = canvasDiv.current.getBoundingClientRect();
   const width = canvas3d.width;
   const height = canvas3d.height;
   renderer.setSize(width, height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   camera.aspect = width / height;
   camera.updateProjectionMatrix();
   const workTrigger = ScrollTrigger.getById("work");
@@ -21,6 +28,8 @@ export default function handleResize(
       trigger.kill();
     }
   });
+
+  if (prefersReducedMotion) return;
   setCharTimeline(character, camera);
   setAllTimeline();
 }

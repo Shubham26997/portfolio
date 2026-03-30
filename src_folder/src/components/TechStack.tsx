@@ -6,7 +6,6 @@ import { EffectComposer, N8AO } from "@react-three/postprocessing";
 
 const textureLoader = new THREE.TextureLoader();
 
-// Mapping the final 9 custom icons including RAG pipelines and Vector DB placeholders
 const techData = [
   { name: "Python", url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" },
   { name: "Django", url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/django/django-plain.svg" },
@@ -19,9 +18,7 @@ const techData = [
   { name: "RAG & LLMs", url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tensorflow/tensorflow-original.svg" },
 ];
 
-const cylinderGeometry = new THREE.CylinderGeometry(1.4, 1.4, 0.4, 32);
-
-// Reduced radius appropriately for the updated camera distance
+const cylinderGeometry = new THREE.CylinderGeometry(2.0, 2.0, 0.5, 32);
 const RADIUS = 8;
 
 type TechNodeProps = {
@@ -34,52 +31,53 @@ type TechNodeProps = {
 function TechNode({ index, total, item, isActive }: TechNodeProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const [hovered, setHover] = useState(false);
-  
-  const angle = (index / total) * Math.PI * 2;
 
+  const angle = (index / total) * Math.PI * 2;
   const texture = useMemo(() => textureLoader.load(item.url), [item.url]);
-  
-  // Set up the custom glass-like material
-  const material = useMemo(() => new THREE.MeshPhysicalMaterial({
-    map: texture,
-    emissive: "#00f0ff", // Neon cyan underneath the logo
-    emissiveMap: texture,
-    emissiveIntensity: 0.15, // Base subtle glow
-    metalness: 0.5,
-    roughness: 0.3,
-    clearcoat: 1.0,
-    clearcoatRoughness: 0.1,
-    color: "#ffffff", // Bright base color so the coins themselves are highly visible
-  }), [texture]);
+
+  const material = useMemo(
+    () =>
+      new THREE.MeshPhysicalMaterial({
+        map: texture,
+        emissive: "#00f0ff",
+        emissiveMap: texture,
+        emissiveIntensity: 0.15,
+        metalness: 0.5,
+        roughness: 0.3,
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.1,
+        color: "#ffffff",
+      }),
+    [texture]
+  );
 
   useFrame((state) => {
     if (!meshRef.current) return;
-    
-    // T is paused if not in view
+
     const t = isActive ? state.clock.getElapsedTime() : 0;
-    
-    // Rotate very slowly 
-    const currentAngle = angle + t * 0.15; 
-    
+    const currentAngle = angle + t * 0.15;
+
     const x = Math.cos(currentAngle) * RADIUS;
     const z = Math.sin(currentAngle) * RADIUS;
-    
-    // Organic wave bobbing
     const y = Math.sin(t * 1.5 + index) * 0.8;
-    
+
     meshRef.current.position.lerp(new THREE.Vector3(x, y, z), 0.1);
-    
+
     meshRef.current.rotation.x = Math.PI / 2;
-    // They slowly spin identically
     meshRef.current.rotation.y = t * 0.5;
-    
-    // Animate structural pop on hover
+
     const targetScale = hovered ? 1.5 : 1;
-    meshRef.current.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.15);
-    
-    // Spike the internal emissive light when hovered
+    meshRef.current.scale.lerp(
+      new THREE.Vector3(targetScale, targetScale, targetScale),
+      0.15
+    );
+
     const targetEmissive = hovered ? 0.9 : 0.15;
-    material.emissiveIntensity = THREE.MathUtils.lerp(material.emissiveIntensity, targetEmissive, 0.1);
+    material.emissiveIntensity = THREE.MathUtils.lerp(
+      material.emissiveIntensity,
+      targetEmissive,
+      0.1
+    );
   });
 
   return (
@@ -90,32 +88,30 @@ function TechNode({ index, total, item, isActive }: TechNodeProps) {
       castShadow
       receiveShadow
       onPointerOver={(e) => {
-        e.stopPropagation(); // Prevents multiple highlights triggered from Z-index overlaps
-        document.body.style.cursor = 'pointer';
+        e.stopPropagation();
+        document.body.style.cursor = "pointer";
         setHover(true);
       }}
       onPointerOut={() => {
-        document.body.style.cursor = 'auto';
+        document.body.style.cursor = "auto";
         setHover(false);
       }}
     >
-      {/* 3D mapped HTML label directly anchored to the coin */}
       {hovered && (
-        <Html 
-          distanceFactor={15} 
-          position={[0, 0, 1.8]} 
-          center 
+        <Html
+          distanceFactor={15}
+          position={[0, 0, 1.8]}
+          center
           zIndexRange={[100, 0]}
           style={{
-            color: '#00f0ff',
-            fontWeight: '900',
-            fontSize: '18px',
-            fontFamily: 'Geist, sans-serif',
-            textTransform: 'uppercase',
-            letterSpacing: '2px',
-            textShadow: '0px 0px 10px #00f0ff, 0px 0px 20px #00f0ff, 0px 0px 30px #00f0ff',
-            pointerEvents: 'none',
-            whiteSpace: 'nowrap'
+            color: "#00f0ff",
+            fontWeight: "900",
+            fontSize: "18px",
+            letterSpacing: "2px",
+            textShadow:
+              "0px 0px 10px #00f0ff, 0px 0px 20px #00f0ff, 0px 0px 30px #00f0ff",
+            pointerEvents: "none",
+            whiteSpace: "nowrap",
           }}
         >
           {item.name}
@@ -130,71 +126,92 @@ const TechStack = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollY = window.scrollY || document.documentElement.scrollTop;
-      const workElem = document.getElementById("work");
-      if(workElem) {
-        const threshold = workElem.getBoundingClientRect().top;
-        setIsActive(scrollY > threshold - 400);
-      } else {
-        setIsActive(true);
+      const observer = document.querySelector(".techstack");
+      if (observer) {
+        const top = observer.getBoundingClientRect().top;
+        setIsActive(top < window.innerHeight + 200);
       }
     };
-    
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <div className="techstack">
-      <h2>My Techstack</h2>
-
-      <Canvas
-        shadows
-        gl={{ alpha: true, stencil: false, depth: false, antialias: true }}
-        camera={{ position: [0, 0, 32], fov: 45, near: 1, far: 100 }}
-        onCreated={(state) => (state.gl.toneMappingExposure = 1.5)}
-        className="tech-canvas"
+    <div
+      className="techstack"
+      style={{
+        position: "relative",
+        paddingTop: "80px",
+        paddingBottom: "100px",
+        textAlign: "center",
+      }}
+    >
+      <h2
+        style={{
+          fontSize: "64px",
+          fontWeight: "800",
+          letterSpacing: "4px",
+          color: "#cfd6e6",
+          marginBottom: "40px",
+          position: "relative",
+          zIndex: 10,
+        }}
       >
-        {/* Expanded ambient brightness */}
-        <ambientLight intensity={1.5} />
-        
-        {/* Core light radiating outward onto the carousel */}
-        <pointLight position={[0, 0, 0]} intensity={2.5} color="#00f0ff" distance={20} decay={2} />
+        MY TECHSTACK
+      </h2>
 
-        {/* Sharp spotlight casting stark shadows */}
-        <spotLight
-          position={[10, 25, 20]}
-          penumbra={1}
-          angle={0.5}
-          color="#00f0ff"
-          intensity={150} 
-          castShadow
-          shadow-mapSize={[1024, 1024]}
-        />
-        <directionalLight position={[-5, 5, 5]} intensity={4} color="#ffffff" />
-        
-        <group rotation={[0.4, 0, 0]} position={[0, -3, 0]}>
-          {techData.map((item, i) => (
-            <TechNode
-              key={i}
-              index={i}
-              total={techData.length}
-              item={item}
-              isActive={isActive}
-            />
-          ))}
-        </group>
-        
-        <Environment
-          files="/models/char_enviorment.hdr"
-          environmentIntensity={0.8}
-          environmentRotation={[0, 4, 2]}
-        />
-        <EffectComposer enableNormalPass={false}>
-          {/* Subtle dark-cyan ambient occlusion */}
-          <N8AO color="#001a33" aoRadius={2} intensity={2.5} />
-        </EffectComposer>
-      </Canvas>
+      <div
+        style={{
+          position: "relative",
+          width: "100%",
+          height: "500px",
+          opacity: isActive ? 1 : 0,
+          transition: "opacity 1.2s ease",
+        }}
+      >
+        <Canvas
+          shadows
+          gl={{ alpha: true, stencil: false, depth: false, antialias: true }}
+          camera={{ position: [0, 0, 26], fov: 45 }}
+          onCreated={(state) => (state.gl.toneMappingExposure = 1.5)}
+        >
+          <ambientLight intensity={1.5} />
+          <pointLight position={[0, 0, 0]} intensity={2.5} color="#00f0ff" />
+
+          <spotLight
+            position={[10, 25, 20]}
+            penumbra={1}
+            angle={0.5}
+            color="#00f0ff"
+            intensity={150}
+            castShadow
+          />
+
+          <directionalLight position={[-5, 5, 5]} intensity={4} />
+
+          {/* FINAL POSITION FIX */}
+          <group rotation={[0.4, 0, 0]} position={[0, -0.5, 0]}>
+            {techData.map((item, i) => (
+              <TechNode
+                key={i}
+                index={i}
+                total={techData.length}
+                item={item}
+                isActive={isActive}
+              />
+            ))}
+          </group>
+
+          <Environment
+            files={import.meta.env.BASE_URL + "models/char_enviorment.hdr"}
+          />
+
+          <EffectComposer enableNormalPass={false}>
+            <N8AO color="#001a33" aoRadius={2} intensity={2.5} />
+          </EffectComposer>
+        </Canvas>
+      </div>
     </div>
   );
 };

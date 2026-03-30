@@ -3,64 +3,76 @@
   max-width: var(--cMaxWidth);
   width: var(--cWidth);
   bottom: 0;
-  z-index: 99;
+  z-index: 500; /* fixed utility layer */
   left: 50%;
   transform: translateX(-50%);
 }
-.social-icons {
+.social-pill {
   position: absolute;
-  left: -20px;
-  bottom: 20px;
+  left: 20px;
+  bottom: 25px;
+  display: flex;
+  align-items: center;
+  background: rgba(17, 34, 64, 0.4);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 8px 16px;
+  border-radius: 50px;
+  gap: 15px;
+  z-index: 500;
+  transition: var(--t-slow);
+  box-shadow: 0 10px 30px -10px rgba(2, 12, 27, 0.7);
+}
+
+.social-pill:hover {
+  border-color: var(--accentColor);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+  transform: translateY(-3px);
+}
+
+.social-pill a {
+  color: #ccd6f6;
+  font-size: 20px;
+  transition: transform 0.3s ease, color 0.3s ease;
+  display: flex;
+}
+
+.social-pill a:hover {
+  color: var(--accentColor);
+  transform: translateY(-2px) scale(1.1);
+}
+
+.pill-divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(204, 214, 246, 0.2);
+}
+
+.social-icons-wrapper {
   display: none;
-  flex-direction: column;
-  gap: 8px;
-  z-index: 999;
-  padding: 10px;
-}
-.social-icons:hover {
-  transition: 0.3s;
-  color: var(--backgroundColor);
-}
-.social-icons a:hover {
-  color: var(--backgroundColor);
-  /* transform: scale(1.2); */
-}
-.social-icons span {
-  width: 50px;
-  height: 50px;
-  position: relative;
-  display: flex;
-}
-.social-icons a {
-  --siLeft: 50%;
-  --siTop: 50%;
-  position: absolute;
-  left: var(--siLeft, 50%);
-  top: var(--siTop, 50%);
-  transform: translate(-50%, -50%);
-  display: flex;
-  font-size: 23px;
-  will-change: left, top;
-  transition: transform 0.3s ease-out;
 }
 .resume-button {
   position: absolute;
-  z-index: 99;
+  z-index: 500;
   display: flex;
-  gap: 5px;
-  bottom: 40px;
-  right: 0;
+  gap: 8px;
+  bottom: 80px;
+  right: -10px;
   width: auto;
   text-wrap: nowrap;
-  letter-spacing: 4px;
-  font-size: 15px;
-  line-height: 15px;
-  font-weight: 600;
-  color: #5e5e5e;
+  letter-spacing: 2px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
   cursor: pointer;
-  transition: 0.5s;
-  transform-origin: left bottom;
-  transform: translateX(100%) rotateZ(-90deg);
+  transition: var(--t-slow);
+  background: var(--backgroundColor);
+  padding: 10px 15px;
+  border-radius: 5px;
+  border: 1px solid var(--accentColor);
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.25);
+  transform-origin: right bottom;
+  transform: rotateZ(-90deg);
 }
 .resume-button:hover {
   color: #fff;
@@ -83,7 +95,7 @@ div.resume-button span {
 }
 @media only screen and (min-width: 900px) {
   .social-icons {
-    display: flex;
+    left: -20px;
     gap: 20px;
   }
   .social-icons a {
@@ -93,11 +105,25 @@ div.resume-button span {
 @media only screen and (min-width: 768px) {
   .resume-button {
     transform: none;
-    font-size: 20px;
-    line-height: 20px;
+    font-size: 18px;
+    bottom: 40px;
+    right: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    color: #5e5e5e;
   }
   div.resume-button span {
     font-size: 23px;
     margin-top: -1.5px;
   }
+}
+
+.icons-section.at-bottom .social-pill,
+.icons-section.at-bottom .resume-button {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(20px);
+  transition: all 0.5s ease;
 }

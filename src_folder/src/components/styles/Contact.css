@@ -1,116 +1,515 @@
 .contact-section {
-  margin: auto;
-  padding-bottom: 100px;
-  margin-top: 100px;
   position: relative;
-  z-index: 2;
+  width: 100%;
+  padding: 120px 0 80px;
   background-color: var(--backgroundColor);
+  /* No overflow:hidden — fixed character slides in from above and must not be clipped */
 }
 
-.contact-section h3 {
-  font-size: 60px;
-  font-weight: 400;
-  text-transform: uppercase;
-  margin: 0;
+.contact-reveal-title {
+  font-size: 64px;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 60px;
+  text-align: left;
+  color: var(--headingColor);
+  width: var(--cWidth);
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 60px;
 }
 
-.contact-flex {
-  display: flex;
-  justify-content: space-between;
-}
-
-.contact-flex h4 {
-  font-weight: 500;
-  margin: 0;
-  opacity: 0.6;
-}
-
-.contact-box {
-  display: flex;
-  flex-direction: column;
-}
-
-.contact-flex p {
-  margin-top: 10px;
-  margin-bottom: 20px;
-}
-
-a.contact-social {
-  font-size: 25px;
-  border-bottom: 1px solid #ccc;
-}
-
-.contact-box h2 {
-  font-weight: 400;
-  font-size: 23px;
-  margin: 0;
-}
-
-.contact-box h2>span {
+.contact-reveal-title span {
+  display: block;
   color: var(--accentColor);
 }
 
-.contact-box h5 {
-  font-size: 20px;
-  font-weight: 500;
-  line-height: 20px;
-  display: flex;
-  gap: 10px;
-  opacity: 0.5;
+/* ── Two-column layout: card constrained left, character gets the right ── */
+.contact-portal-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 720px) 1fr;
+  gap: 40px;
+  align-items: center;
+  width: var(--cWidth);
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
-@media only screen and (max-width: 1600px) {
-  .contact-section h3 {
-    font-size: 50px;
+/* Card sits above the fixed character (z-index: 15) */
+.contact-portal-card {
+  position: relative;
+  background: var(--surfaceColor);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 28px;
+  padding: 64px 64px 56px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.08),
+              0 50px 120px rgba(0, 0, 0, 0.55),
+              0 0 80px rgba(16, 185, 129, 0.06);
+  transform-style: preserve-3d;
+  z-index: 20; /* above fixed character canvas (z-index: 15) */
+}
+
+/* Right side: character appears here via GSAP — empty placeholder */
+.contact-pointer-side {
+  pointer-events: none;
+}
+
+
+@keyframes fadePointer {
+  to { opacity: 1; }
+}
+
+.contact-availability {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 30px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accentColor);
+  opacity: 0;
+  animation: fadePointer 0.6s 2.5s ease forwards;
+}
+
+.availability-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accentColor);
+  animation: pulse 2s infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.8); }
+}
+
+.portal-glow {
+  position: absolute;
+  top: -20%;
+  left: -20%;
+  width: 140%;
+  height: 140%;
+  background: radial-gradient(circle at center, rgba(16, 185, 129, 0.18) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.portal-content {
+  position: relative;
+  z-index: 2;
+  transform: translateZ(20px);
+}
+
+.portal-identity {
+  margin-bottom: 30px;
+}
+
+.portal-name {
+  font-size: 40px;
+  font-weight: 800;
+  color: var(--headingColor);
+  margin: 0 0 10px;
+}
+
+/* ── Designation: lock/reveal mechanic ── */
+.portal-designation-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  margin-top: 4px;
+  user-select: none;
+}
+
+.portal-designation-wrapper:hover .portal-designation {
+  opacity: 1;
+}
+
+.portal-designation {
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--textColor);
+  opacity: 0.65;
+  margin: 0;
+  transition: opacity var(--t-mid);
+}
+
+.portal-lock-icon {
+  font-size: 15px;
+  color: var(--accentColor);
+  opacity: 0.55;
+  display: flex;
+  align-items: center;
+  transition: opacity var(--t-mid), transform var(--t-mid);
+  flex-shrink: 0;
+}
+
+.portal-designation-wrapper:hover .portal-lock-icon {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+.portal-company-slide {
+  transform: translateX(-16px);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.45s cubic-bezier(0.19, 1, 0.22, 1);
+  color: var(--accentColor);
+  font-weight: 700;
+  font-size: 17px;
+  white-space: nowrap;
+}
+
+.portal-company-slide.visible {
+  transform: translateX(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Small hint that appears under designation when company is hidden */
+.portal-reveal-hint {
+  font-size: 11px;
+  color: var(--accentColor);
+  opacity: 0.45;
+  margin: 5px 0 0;
+  letter-spacing: 0.5px;
+  font-style: italic;
+  transition: opacity var(--t-mid);
+}
+
+.portal-designation-wrapper:hover + .portal-reveal-hint {
+  opacity: 0.8;
+}
+
+/* ── CTA section ── */
+.portal-cta-wrapper {
+  margin-top: 28px;
+}
+
+@keyframes ctaGlow {
+  0%, 100% { text-shadow: 0 0 0px rgba(16, 185, 129, 0); }
+  50%       { text-shadow: 0 0 24px rgba(16, 185, 129, 0.45); }
+}
+
+.portal-email-trigger {
+  background: none;
+  border: none;
+  font-size: clamp(22px, 4vw, 36px);
+  font-weight: 800;
+  color: var(--headingColor);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  padding: 0;
+  animation: ctaGlow 2.8s ease-in-out infinite;
+  transition: color var(--t-mid), transform var(--t-mid);
+}
+
+.portal-email-trigger:hover {
+  color: var(--accentColor);
+  transform: translateX(8px);
+  animation: none; /* stop glow when actively hovering */
+  text-shadow: 0 0 24px rgba(16, 185, 129, 0.5);
+}
+
+.portal-email-trigger svg {
+  font-size: 28px;
+  opacity: 0.55;
+  transition: opacity var(--t-mid), transform var(--t-mid);
+}
+
+.portal-email-trigger:hover svg {
+  opacity: 1;
+  transform: translate(4px, -4px);
+}
+
+/* ── Redacted email hint — visible below CTA, blurred until clicked ── */
+.email-blur-hint {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.email-blur-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--textColor);
+  letter-spacing: 1px;
+  filter: blur(5px);
+  opacity: 0.7;
+  transition: filter 0.4s ease, opacity 0.4s ease;
+  font-family: monospace;
+  user-select: none;
+  pointer-events: none;
+}
+
+.portal-cta-wrapper:hover .email-blur-text {
+  filter: blur(3px);
+  opacity: 0.9;
+}
+
+.email-blur-label {
+  font-size: 10px;
+  color: var(--accentMuted);
+  opacity: 0.5;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+/* ── Email Modal ── */
+.email-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 25, 47, 0.85);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  animation: modalFadeIn 0.3s ease forwards;
+}
+
+.email-modal-card {
+  background: var(--surfaceColor);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+  width: 90%;
+  max-width: 480px;
+  text-align: center;
+  transform: scale(0.9);
+  animation: modalScaleUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  position: relative;
+}
+
+.modal-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accentColor);
+  opacity: 0.7;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--headingColor);
+  margin: 0 0 4px;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  border: none;
+  background: none;
+  color: var(--textMuted);
+  cursor: pointer;
+  font-size: 22px;
+  line-height: 1;
+  padding: 6px;
+  opacity: 0.7;
+  transition: opacity var(--t-fast), transform var(--t-fast), color var(--t-fast);
+}
+
+.modal-close-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+  color: var(--headingColor);
+}
+
+.email-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  background: rgba(10, 25, 47, 0.6);
+  padding: 14px 22px;
+  border-radius: 12px;
+  margin: 20px 0 12px;
+  border: 1px solid rgba(16, 185, 129, 0.12);
+}
+
+.email-display code {
+  font-size: 16px;
+  color: var(--textColor);
+  font-family: monospace;
+  letter-spacing: 0.5px;
+}
+
+.copy-btn {
+  background: none;
+  border: none;
+  color: var(--accentColor);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  transition: transform var(--t-fast);
+  flex-shrink: 0;
+}
+
+.copy-btn:hover {
+  transform: scale(1.15);
+}
+
+.copy-notif {
+  font-size: 11px;
+  color: var(--accentColor);
+  margin-top: -6px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes modalScaleUp {
+  to { transform: scale(1); }
+}
+
+/* ── Portal lower grid ── */
+.portal-main {
+  margin-bottom: 40px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 32px;
+}
+
+.portal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+.portal-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--accentColor);
+  opacity: 0.6;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.portal-text {
+  font-size: 15px;
+  color: var(--textColor);
+  opacity: 0.85;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.portal-socials {
+  display: flex;
+  gap: 24px;
+  margin-top: 10px;
+}
+
+.portal-social-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--textColor);
+  transition: color var(--t-mid);
+}
+
+.portal-social-link:hover {
+  color: var(--accentColor);
+}
+
+.footer-credits {
+  margin-top: 60px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  text-align: center;
+}
+
+.credit-text h4 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  margin-top: 0;
+}
+
+.credit-text h4 span {
+  color: var(--accentColor);
+}
+
+.credit-text p {
+  font-size: 13px;
+  opacity: 0.45;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+/* ── Mobile ── */
+@media only screen and (max-width: 1024px) {
+  .contact-section {
+    padding: 80px 20px;
   }
 
-  .contact-box h2 {
-    font-size: 20px;
+  .contact-reveal-title {
+    font-size: 36px;
+    margin-bottom: 40px;
+    text-align: center;
   }
 
-  a.contact-social {
+  .contact-portal-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-pointer-side {
+    display: none;
+  }
+
+  .contact-portal-card {
+    padding: 36px 28px;
+  }
+
+  .portal-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .portal-email-trigger {
     font-size: 22px;
   }
-}
 
-@media only screen and (max-width: 1300px) {
-  .contact-section h3 {
-    font-size: 40px;
-  }
-
-  .contact-box h2 {
-    font-size: 18px;
-  }
-
-  a.contact-social {
-    font-size: 20px;
-  }
-
-  .contact-flex p {
-    margin-top: 0px;
+  .portal-designation-wrapper {
+    flex-wrap: wrap;
   }
 }
 
-@media only screen and (max-width: 900px) {
-  .contact-flex {
-    flex-direction: column;
-    gap: 40px;
+@media only screen and (max-width: 600px) {
+  .contact-reveal-title {
+    font-size: 28px;
   }
 
-  .contact-flex p {
-    margin-bottom: 0px;
+  .portal-name {
+    font-size: 26px;
   }
 
-  .contact-flex h4 {
-    margin-top: 20px;
-  }
-
-  .contact-section {
-    margin-top: 50px;
-    padding-bottom: 50px;
-  }
-
-  .contact-container {
-    width: calc(100% - 25px);
+  .email-display code {
+    font-size: 13px;
   }
 }

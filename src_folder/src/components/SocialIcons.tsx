@@ -4,23 +4,50 @@ import {
 } from "react-icons/fa6";
 import "./styles/SocialIcons.css";
 import { TbNotes } from "react-icons/tb";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import HoverLinks from "./HoverLinks";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const SocialIcons = () => {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 150);
+    };
+    window.addEventListener("scroll", onScroll);
+
+    ScrollTrigger.create({
+      trigger: ".contact-section",
+      start: "top 80%",
+      onEnter: () => setScrolled(true), // Ensure hide state
+      onLeaveBack: () => setScrolled(window.scrollY > 150),
+    });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+
   useEffect(() => {
     const social = document.getElementById("social") as HTMLElement;
 
-    social.querySelectorAll("span").forEach((item) => {
-      const elem = item as HTMLElement;
-      const link = elem.querySelector("a") as HTMLElement;
+    if (!social) return;
 
-      const rect = elem.getBoundingClientRect();
+    const links = Array.from(social.querySelectorAll("a")) as HTMLElement[];
+    const cleanupFns: Array<() => void> = [];
+
+    links.forEach((link) => {
+      const rect = link.getBoundingClientRect();
       let mouseX = rect.width / 2;
       let mouseY = rect.height / 2;
       let currentX = 0;
       let currentY = 0;
 
+      let rafId = 0;
       const updatePosition = () => {
         currentX += (mouseX - currentX) * 0.1;
         currentY += (mouseY - currentY) * 0.1;
@@ -28,7 +55,7 @@ const SocialIcons = () => {
         link.style.setProperty("--siLeft", `${currentX}px`);
         link.style.setProperty("--siTop", `${currentY}px`);
 
-        requestAnimationFrame(updatePosition);
+        rafId = requestAnimationFrame(updatePosition);
       };
 
       const onMouseMove = (e: MouseEvent) => {
@@ -45,30 +72,45 @@ const SocialIcons = () => {
       };
 
       document.addEventListener("mousemove", onMouseMove);
-
       updatePosition();
 
-      return () => {
-        elem.removeEventListener("mousemove", onMouseMove);
-      };
+      cleanupFns.push(() => {
+        document.removeEventListener("mousemove", onMouseMove);
+        cancelAnimationFrame(rafId);
+      });
     });
+
+    return () => cleanupFns.forEach((fn) => fn());
+  }, []);
+
+  const [isAtBottom, setIsAtBottom] = useState(false);
+
+  useEffect(() => {
+    const checkBottom = () => {
+      const scrollY = window.scrollY || document.documentElement.scrollTop;
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      
+      // Hide if within 60px of the bottom
+      setIsAtBottom(scrollY + windowHeight >= documentHeight - 60);
+    };
+
+    window.addEventListener("scroll", checkBottom);
+    return () => window.removeEventListener("scroll", checkBottom);
   }, []);
 
   return (
-    <div className="icons-section">
-      <div className="social-icons" data-cursor="icons" id="social">
-        <span>
-          <a href="https://github.com/Shubham26997" target="_blank">
-            <FaGithub />
-          </a>
-        </span>
-        <span>
-          <a href="https://linkedin.com/in/shubhamgoel26" target="_blank">
-            <FaLinkedinIn />
-          </a>
-        </span>
+    <div className={`icons-section ${scrolled ? "scrolled" : ""} ${isAtBottom ? "at-bottom" : ""}`}>
+      <div className="social-pill" data-cursor="icons" id="social">
+        <a href="https://github.com/Shubham26997" target="_blank" aria-label="GitHub">
+          <FaGithub />
+        </a>
+        <div className="pill-divider"></div>
+        <a href="https://linkedin.com/in/shubhamgoel26" target="_blank" aria-label="LinkedIn">
+          <FaLinkedinIn />
+        </a>
       </div>
-      <a className="resume-button" href="/Shubham_Goel_Resume.pdf" target="_blank">
+      <a className="resume-button" href={import.meta.env.BASE_URL + "Shubham_Goel_Resume.pdf"} target="_blank">
         <HoverLinks text="RESUME" />
         <span>
           <TbNotes />

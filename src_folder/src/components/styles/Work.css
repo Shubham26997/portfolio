@@ -1,331 +1,207 @@
-/* ── Work Section ── */
 .work-section {
   position: relative;
-  z-index: 1;
+  z-index: 16;
   background-color: var(--backgroundColor);
-  padding: 80px 0;
+  padding: 80px 5%;
 }
 
-.work-section h2 {
-  font-size: 70px;
-  font-weight: 500;
-  margin-top: 0;
-  margin-bottom: 50px;
+.section-title {
+  font-size: 60px;
+  font-weight: 800;
+  margin-bottom: 80px;
+  text-align: center;
 }
 
-.work-section h2>span {
+.section-title span {
   color: var(--accentColor);
 }
 
-.work-container {
-  margin: auto;
-}
-
-/* ── Carousel ── */
-.carousel-wrapper {
-  position: relative;
-  width: 100%;
-}
-
-.carousel-track-container {
-  overflow: hidden;
-  width: 100%;
-  border-top: 1px solid #363636;
-  border-bottom: 1px solid #363636;
-}
-
-.carousel-track {
-  display: flex;
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: transform;
-}
-
-.carousel-slide {
-  min-width: 100%;
-  flex-shrink: 0;
-  box-sizing: border-box;
-  padding: 50px 0;
-}
-
-.carousel-content {
-  display: flex;
-  align-items: center;
-  gap: 60px;
-  width: 100%;
-}
-
-.carousel-info {
-  flex: 1;
-  display: flex;
-  gap: 30px;
-  align-items: flex-start;
-}
-
-.carousel-number h3 {
-  font-size: 60px;
-  line-height: 1;
-  margin: 0;
-  font-weight: 600;
-  opacity: 0.3;
-}
-
-.carousel-details {
+.work-tiles-container {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-}
-
-.carousel-details h4 {
-  font-size: 28px;
-  font-weight: 500;
-  margin: 0;
-}
-
-.carousel-category {
-  font-weight: 200;
-  color: #adacac;
-  margin: 0;
-  font-size: 16px;
-}
-
-.carousel-tools {
-  margin-top: 16px;
-}
-
-.carousel-tools .tools-label {
-  font-size: 14px;
-  font-weight: 400;
-  opacity: 0.6;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.carousel-tools p {
-  font-weight: 200;
-  color: #adacac;
-  margin: 6px 0 0;
-  font-size: 15px;
-}
-
-.carousel-image-wrapper {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* ── Navigation Arrows ── */
-.carousel-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #eae5ec;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(8px);
-}
-
-.carousel-arrow:hover {
-  background: rgba(94, 234, 212, 0.15);
-  border-color: var(--accentColor);
-  color: var(--accentColor);
-  box-shadow: 0 0 20px rgba(94, 234, 212, 0.15);
-}
-
-.carousel-arrow-left {
-  left: -70px;
-}
-
-.carousel-arrow-right {
-  right: -70px;
-}
-
-/* ── Dot Indicators ── */
-.carousel-dots {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 35px;
-}
-
-.carousel-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  background: transparent;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  padding: 0;
-}
-
-.carousel-dot:hover {
-  border-color: var(--accentColor);
-  background: rgba(94, 234, 212, 0.2);
-}
-
-.carousel-dot-active {
-  background: var(--accentColor);
-  border-color: var(--accentColor);
-  box-shadow: 0 0 8px rgba(94, 234, 212, 0.4);
-}
-
-/* ── Work Image (reused) ── */
-.work-image {
-  display: flex;
+  gap: 100px;
   width: 100%;
-  justify-content: center;
 }
 
-.work-image-in {
+.work-tile {
+  width: 100%;
   position: relative;
 }
 
-.work-link {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  background-color: var(--backgroundColor);
-  width: 50px;
-  border-radius: 50px;
-  height: 50px;
+.tile-content {
   display: flex;
-  justify-content: center;
   align-items: center;
-  font-size: 25px;
-  box-shadow: 0px 0px 10px 0px rgba(255, 255, 255, 0.5),
-    inset 0px 0px 10px 0px #393939;
-  transition: 0.3s;
-  opacity: 0;
-}
-
-.work-image a:hover {
-  color: inherit;
-}
-
-.work-image a:hover .work-link {
-  opacity: 1;
-}
-
-.work-image video {
-  position: absolute;
+  gap: 80px;
   width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background-color: #000;
-  object-fit: cover;
 }
 
-.work-image img {
-  max-width: 100%;
-  max-height: 400px;
-  border-radius: 8px;
+.tile-info {
+  flex: 1.5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-/* ── Responsive ── */
-@media only screen and (max-width: 1600px) {
-  .carousel-arrow-left {
-    left: -60px;
-  }
+.tile-number {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accentColor);
+  display: block;
+  margin-bottom: 15px;
+  opacity: 0.6;
+}
 
-  .carousel-arrow-right {
-    right: -60px;
+.tile-title {
+  font-size: 42px;
+  font-weight: 800;
+  margin: 0 0 15px 0;
+  color: var(--headingColor);
+}
+
+.tile-category {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 600;
+  color: var(--accentColor);
+  margin-bottom: 25px;
+}
+
+.tile-description {
+  font-size: 18px;
+  line-height: 1.7;
+  color: #ccd6f6;
+  font-weight: 400;
+  margin-bottom: 30px;
+  opacity: 0.9;
+}
+
+.tile-summary {
+  margin-bottom: 30px;
+}
+
+.tile-paragraph {
+  font-size: 18px;
+  line-height: 1.7;
+  color: #ccd6f6;
+  font-weight: 400;
+  opacity: 0.9;
+  margin: 0 0 12px 0;
+}
+
+.tile-paragraph:last-child {
+  margin-bottom: 0;
+}
+
+.tile-paragraph-label {
+  display: inline-block;
+  margin-right: 10px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 800;
+  color: var(--accentColor);
+}
+
+.tile-tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tools-label {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--accentColor);
+}
+
+.tile-tools p {
+  font-size: 14px;
+  color: #8892b0;
+  font-family: inherit;
+}
+
+.tile-image-wrapper {
+  flex: 0.7;
+  position: relative;
+  perspective: 2000px;
+  max-width: 550px;
+}
+
+.tile-image-in {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  transition: transform 0.6s cubic-bezier(0.2, 1, 0.3, 1);
+  background: var(--surfaceColor);
+  border: 1px solid rgba(16, 185, 129, 0.1);
+}
+
+.work-tile:hover .tile-image-in {
+  transform: rotateY(-8deg) rotateX(8deg) scale(1.04);
+  border-color: rgba(16, 185, 129, 0.4);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+}
+
+/* ── Alternating Layout ── */
+@media only screen and (min-width: 1025px) {
+  .work-tile:nth-child(even) .tile-content {
+    flex-direction: row-reverse;
   }
 }
 
-@media only screen and (max-width: 1400px) {
-  .work-section h2 {
-    font-size: 50px;
+/* ── Mobile ── */
+@media only screen and (max-width: 1024px) {
+  .work-section {
+    padding: 60px 20px;
+  }
+  
+  .section-title {
+    font-size: 40px;
+    margin-bottom: 50px;
   }
 
-  .carousel-details h4 {
-    font-size: 22px;
+  .work-tiles-container {
+    gap: 80px;
   }
 
-  .carousel-number h3 {
-    font-size: 45px;
-  }
-
-  .carousel-content {
+  .tile-content {
+    flex-direction: column;
     gap: 40px;
   }
 
-  .carousel-arrow-left {
-    left: 10px;
+  .tile-info {
+    order: 2;
   }
 
-  .carousel-arrow-right {
-    right: 10px;
-  }
-}
-
-@media only screen and (max-width: 1025px) {
-  .carousel-content {
-    flex-direction: column;
-    gap: 30px;
-  }
-
-  .carousel-info {
+  .tile-image-wrapper {
+    order: 1;
     width: 100%;
   }
 
-  .carousel-image-wrapper {
-    width: 100%;
+  .tile-title {
+    font-size: 32px;
   }
 
-  .carousel-arrow {
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
+  .tile-description {
+    font-size: 16px;
   }
 
-  .carousel-arrow-left {
-    left: 10px;
-  }
-
-  .carousel-arrow-right {
-    right: 10px;
+  .tile-paragraph {
+    font-size: 16px;
   }
 }
 
-@media only screen and (max-width: 900px) {
-  .work-section {
-    padding: 50px 0;
+@media only screen and (min-width: 1950px) {
+  .section-title {
+    font-size: 80px;
   }
-
-  .work-section h2 {
-    font-size: 40px;
-    margin-bottom: 30px;
+  .tile-title {
+    font-size: 3.5rem;
   }
-
-  .carousel-number h3 {
-    font-size: 35px;
-  }
-
-  .carousel-details h4 {
-    font-size: 20px;
-  }
-
-  .carousel-content {
-    gap: 20px;
-  }
-
-  .carousel-slide {
-    padding: 30px 0;
-  }
-
-  .work-image img {
-    max-height: 250px;
+  .tile-description {
+    font-size: 1.5rem;
   }
 }

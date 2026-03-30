@@ -1,54 +1,68 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import "./styles/Cursor.css";
-import gsap from "gsap";
+import { gsap } from "gsap";
 
 const Cursor = () => {
-  const cursorRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    let hover = false;
-    const cursor = cursorRef.current!;
-    const mousePos = { x: 0, y: 0 };
-    const cursorPos = { x: 0, y: 0 };
-    document.addEventListener("mousemove", (e) => {
-      mousePos.x = e.clientX;
-      mousePos.y = e.clientY;
-    });
-    requestAnimationFrame(function loop() {
-      if (!hover) {
-        const delay = 6;
-        cursorPos.x += (mousePos.x - cursorPos.x) / delay;
-        cursorPos.y += (mousePos.y - cursorPos.y) / delay;
-        gsap.to(cursor, { x: cursorPos.x, y: cursorPos.y, duration: 0.1 });
-        // cursor.style.transform = `translate(${cursorPos.x}px, ${cursorPos.y}px)`;
-      }
-      requestAnimationFrame(loop);
-    });
-    document.querySelectorAll("[data-cursor]").forEach((item) => {
-      const element = item as HTMLElement;
-      element.addEventListener("mouseover", (e: MouseEvent) => {
-        const target = e.currentTarget as HTMLElement;
-        const rect = target.getBoundingClientRect();
+    const [isMobile, setIsMobile] = useState(false);
 
-        if (element.dataset.cursor === "icons") {
-          cursor.classList.add("cursor-icons");
+    useEffect(() => {
+        const prefersReducedMotion =
+          typeof window !== "undefined" &&
+          window.matchMedia &&
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-          gsap.to(cursor, { x: rect.left, y: rect.top, duration: 0.1 });
-          //   cursor.style.transform = `translate(${rect.left}px,${rect.top}px)`;
-          cursor.style.setProperty("--cursorH", `${rect.height}px`);
-          hover = true;
-        }
-        if (element.dataset.cursor === "disable") {
-          cursor.classList.add("cursor-disable");
-        }
-      });
-      element.addEventListener("mouseout", () => {
-        cursor.classList.remove("cursor-disable", "cursor-icons");
-        hover = false;
-      });
-    });
-  }, []);
+        setIsMobile(window.innerWidth < 1024 || prefersReducedMotion);
+        
+        const cursor = document.querySelector(".custom-cursor") as HTMLElement;
+        const cursorDot = document.querySelector(".cursor-dot") as HTMLElement;
+        
+        if (!cursor || window.innerWidth < 1024 || prefersReducedMotion) return;
 
-  return <div className="cursor-main" ref={cursorRef}></div>;
+        const moveCursor = (e: MouseEvent) => {
+            gsap.to(cursor, {
+                x: e.clientX,
+                y: e.clientY,
+                duration: 0.5,
+                ease: "power2.out"
+            });
+            gsap.to(cursorDot, {
+                x: e.clientX,
+                y: e.clientY,
+                duration: 0.1,
+                ease: "power2.out"
+            });
+        };
+
+        const onMouseEnter = (e: MouseEvent) => {
+            const target = e.target as HTMLElement;
+            if (target.tagName === "A" || target.tagName === "BUTTON" || target.closest(".social-icons") || target.getAttribute("data-cursor") === "pointer") {
+                cursor.classList.add("cursor-hover");
+            }
+        };
+
+        const onMouseLeave = () => {
+            cursor.classList.remove("cursor-hover");
+        };
+
+        window.addEventListener("mousemove", moveCursor);
+        document.addEventListener("mouseover", onMouseEnter);
+        document.addEventListener("mouseout", onMouseLeave);
+
+        return () => {
+            window.removeEventListener("mousemove", moveCursor);
+            document.removeEventListener("mouseover", onMouseEnter);
+            document.removeEventListener("mouseout", onMouseLeave);
+        };
+    }, []);
+
+    if (isMobile) return null;
+
+    return (
+        <>
+            <div className="custom-cursor"></div>
+            <div className="cursor-dot"></div>
+        </>
+    );
 };
 
 export default Cursor;

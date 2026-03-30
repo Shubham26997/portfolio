@@ -1,33 +1,44 @@
-.cursor-main {
-  --size: 0px;
+.custom-cursor {
   position: fixed;
-  top: calc(var(--size) / -2);
-  left: calc(var(--size) / -2);
-  width: var(--size);
-  height: var(--size);
-  border-radius: 50px;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--accentColor);
+  border-radius: 50%;
   pointer-events: none;
-  z-index: 99;
-  background-color: #e6c3ff;
-  box-shadow: 0px 0px 30px 0px rgb(175, 131, 255);
-  mix-blend-mode: difference;
-  transition: top 0.3s ease-out, left 0.3s ease-out, width 0.3s ease-out,
-    height 0.3s ease-out;
+  z-index: 9998; /* below loading screen (10000), above everything else */
+  transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.cursor-icons {
-  top: 10px;
-  left: 10px;
-  height: calc(var(--cursorH) - 20px);
-  transition: all 0.5s ease-out, height 0.5s ease-in-out;
+
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  background-color: var(--accentColor);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
 }
-.cursor-disable {
-  --size: 0px;
+
+.cursor-hover.custom-cursor {
+  width: 80px;
+  height: 80px;
+  background-color: rgba(16, 185, 129, 0.1);
+  border-color: transparent;
+  backdrop-filter: blur(2px);
 }
-@media only screen and (min-width: 600px) {
-  .cursor-main {
-    --size: 50px;
-  }
-  .cursor-disable {
-    --size: 0px;
+
+@media only screen and (max-width: 1024px) {
+  .custom-cursor,
+  .cursor-dot {
+    display: none;
   }
 }

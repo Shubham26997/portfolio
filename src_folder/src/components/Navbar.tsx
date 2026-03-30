@@ -1,44 +1,12 @@
-import { useEffect } from "react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useState } from "react";
 import HoverLinks from "./HoverLinks";
-import { gsap } from "gsap";
-import { ScrollSmoother } from "gsap-trial/ScrollSmoother";
+import { HiMenuAlt3, HiX } from "react-icons/hi";
 import "./styles/Navbar.css";
 
-gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
-export let smoother: ScrollSmoother;
-
 const Navbar = () => {
-  useEffect(() => {
-    smoother = ScrollSmoother.create({
-      wrapper: "#smooth-wrapper",
-      content: "#smooth-content",
-      smooth: 1.7,
-      speed: 1.7,
-      effects: true,
-      autoResize: true,
-      ignoreMobileResize: true,
-    });
+  const [menuOpen, setMenuOpen] = useState(false);
 
-    smoother.scrollTop(0);
-    smoother.paused(true);
-
-    let links = document.querySelectorAll(".header ul a");
-    links.forEach((elem) => {
-      let element = elem as HTMLAnchorElement;
-      element.addEventListener("click", (e) => {
-        if (window.innerWidth > 1024) {
-          e.preventDefault();
-          let elem = e.currentTarget as HTMLAnchorElement;
-          let section = elem.getAttribute("data-href");
-          smoother.scrollTo(section, true, "top top");
-        }
-      });
-    });
-    window.addEventListener("resize", () => {
-      ScrollSmoother.refresh(true);
-    });
-  }, []);
+  const navId = "primary-navigation";
   return (
     <>
       <div className="header">
@@ -50,21 +18,33 @@ const Navbar = () => {
           className="navbar-connect"
           data-cursor="disable"
         >
-          shubhamgoel386@gmail.com
+          Software Engineer
         </a>
-        <ul>
+
+        <button
+          type="button"
+          className="menu-toggle"
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={menuOpen}
+          aria-controls={navId}
+          onClick={() => setMenuOpen((v) => !v)}
+        >
+          {menuOpen ? <HiX /> : <HiMenuAlt3 />}
+        </button>
+
+        <ul id={navId} className={menuOpen ? "nav-open" : ""} aria-hidden={!menuOpen}>
           <li>
-            <a data-href="#about" href="#about">
+            <a href="#about" onClick={() => setMenuOpen(false)}>
               <HoverLinks text="ABOUT" />
             </a>
           </li>
           <li>
-            <a data-href="#work" href="#work">
+            <a href="#work" onClick={() => setMenuOpen(false)}>
               <HoverLinks text="WORK" />
             </a>
           </li>
           <li>
-            <a data-href="#contact" href="#contact">
+            <a href="#contact" onClick={() => setMenuOpen(false)}>
               <HoverLinks text="CONTACT" />
             </a>
           </li>

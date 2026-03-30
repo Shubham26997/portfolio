@@ -1,26 +1,45 @@
 @import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap");
 
+/* ── Z-index scale ──────────────────────────────────────
+   10    ambient / decorative effects (noise, blur circles)
+   100   standard content
+   500   fixed utility elements (social pill, resume btn)
+   1000  fixed navigation
+   2000  modals & overlays
+   10000 loading screen (topmost until dismissed)
+─────────────────────────────────────────────────────── */
+
 :root {
   font-family: "Geist", sans-serif;
 
   font-optical-sizing: auto;
   font-style: normal;
-  line-height: 1.5;
+  line-height: 1.6;
   scroll-behavior: smooth;
-  color-scheme: light dark;
-  color: #eae5ec;
+  color-scheme: dark;
+  color: #ccd6f6;
   background-color: var(--backgroundColor);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  --accentColor: #00f0ff;
-  --backgroundColor: #050810;
-  --vh: 100vh;
+
+  /* ── Color tokens ── */
+  --accentColor: #10b981;
+  --accentSecondary: #00f0ff;
+  --accentMuted: #14b8a6;
+  --backgroundColor: #0a192f;
+  --surfaceColor: #112240;
+  --headingColor: #ffffff;
+  --textColor: #ccd6f6;
+  --textMuted: #8892b0;
+
+  /* ── Transitions ── */
+  --t-fast: 0.15s ease;
+  --t-mid: 0.3s ease;
+  --t-slow: 0.5s ease;
+
   --vh: 100svh;
 }
 
@@ -31,10 +50,6 @@ h4,
 h5,
 h6 {
   font-family: "Geist", sans-serif;
-}
-
-body {
-  overflow: hidden;
 }
 
 a {
@@ -63,15 +78,37 @@ main {
   }
 }
 
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.05;
+  z-index: 10; /* ambient layer */
+  pointer-events: none;
+  /* Self-hosted inline noise — avoids external CDN dependency */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  filter: contrast(120%) brightness(120%);
+}
+
 body {
+  overflow-x: hidden;
   margin: 0;
   height: auto;
-  background-color: #050810;
+  background-color: var(--backgroundColor);
   flex-grow: 1;
   --cWidth: calc(100% - 30px);
   --cMaxWidth: 1920px;
   max-width: 100vw;
-  overflow-x: hidden;
+}
+
+/* ── Focus styles — keyboard navigation ── */
+:focus-visible {
+  outline: 2px solid var(--accentColor);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
 .main-body {
@@ -107,10 +144,12 @@ body {
   width: 100%;
   position: relative;
   overflow: clip;
-  height: var(--vh);
+  height: 80vh;
   margin: auto;
-  margin-top: 50px;
-  margin-bottom: -100px;
+  margin-top: 0;
+  margin-bottom: 0;
+  z-index: 16;
+  background-color: var(--backgroundColor);
 }
 
 .techstack h2 {
@@ -120,7 +159,6 @@ body {
   width: 100%;
   top: 120px;
   left: 0;
-  font-weight: 400;
   text-transform: uppercase;
 }
 
@@ -133,5 +171,22 @@ body {
 @media screen and (max-width: 900px) {
   .techstack h2 {
     font-size: 40px;
+  }
+}
+
+/* Global reduced-motion policy for accessibility + performance */
+@media (prefers-reduced-motion: reduce) {
+  html,
+  body {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }

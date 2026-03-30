@@ -1,136 +1,94 @@
-import { SplitText } from "gsap-trial/SplitText";
 import gsap from "gsap";
-import { smoother } from "../Navbar";
 
 export function initialFX() {
   document.body.style.overflowY = "auto";
-  smoother.paused(false);
-  document.getElementsByTagName("main")[0].classList.add("main-active");
+  const main = document.getElementsByTagName("main")[0];
+  if (main) main.classList.add("main-active");
+
   gsap.to("body", {
-    backgroundColor: "#0a0e17",
+    backgroundColor: "#050810",
     duration: 0.5,
     delay: 1,
   });
 
-  var landingText = new SplitText(
-    [".landing-info h3", ".landing-intro h2", ".landing-intro h1"],
-    {
-      type: "chars,lines",
-      linesClass: "split-line",
-    }
-  );
+  // Fade and slide header/intro info
   gsap.fromTo(
-    landingText.chars,
-    { opacity: 0, y: 80, filter: "blur(5px)" },
+    ".landing-info h3, .landing-intro h2, .landing-intro h1",
+    { opacity: 0, y: 80, filter: "blur(10px)" },
     {
       opacity: 1,
-      duration: 1.2,
+      duration: 1.5,
       filter: "blur(0px)",
-      ease: "power3.inOut",
+      ease: "expo.out",
       y: 0,
-      stagger: 0.025,
-      delay: 0.3,
+      stagger: 0.2,
+      delay: 0.5,
     }
   );
 
-  let TextProps = { type: "chars,lines", linesClass: "split-h2" };
-
-  var landingText2 = new SplitText(".landing-h2-info", TextProps);
-  gsap.fromTo(
-    landingText2.chars,
-    { opacity: 0, y: 80, filter: "blur(5px)" },
-    {
-      opacity: 1,
-      duration: 1.2,
-      filter: "blur(0px)",
-      ease: "power3.inOut",
-      y: 0,
-      stagger: 0.025,
-      delay: 0.3,
-    }
-  );
-
+  // Fade-in the container for the rotating titles
   gsap.fromTo(
     ".landing-info-h2",
     { opacity: 0, y: 30 },
     {
       opacity: 1,
-      duration: 1.2,
-      ease: "power1.inOut",
+      duration: 1.5,
+      ease: "power2.out",
       y: 0,
-      delay: 0.8,
+      delay: 1.2,
     }
   );
+  
   gsap.fromTo(
     [".header", ".icons-section", ".nav-fade"],
     { opacity: 0 },
     {
       opacity: 1,
-      duration: 1.2,
-      ease: "power1.inOut",
-      delay: 0.1,
+      duration: 1.5,
+      ease: "power2.inOut",
+      delay: 0.2,
     }
   );
 
-  var landingText3 = new SplitText(".landing-h2-info-1", TextProps);
-  var landingText4 = new SplitText(".landing-h2-1", TextProps);
-  var landingText5 = new SplitText(".landing-h2-2", TextProps);
-
-  LoopText(landingText2, landingText3);
-  LoopText(landingText4, landingText5);
+  // Re-engineered word flip without overlap
+  loopText(".landing-h2-1", ".landing-h2-2");
 }
 
-function LoopText(Text1: SplitText, Text2: SplitText) {
-  var tl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
-  const delay = 4;
-  const delay2 = delay * 2 + 1;
+function loopText(first: string, second: string) {
+  const tl = gsap.timeline({ repeat: -1, repeatDelay: 2 });
+  const duration = 1.2;
+  const ease = "expo.inOut";
 
-  tl.fromTo(
-    Text2.chars,
-    { opacity: 0, y: 80 },
-    {
-      opacity: 1,
-      duration: 1.2,
-      ease: "power3.inOut",
-      y: 0,
-      stagger: 0.1,
-      delay: delay,
-    },
-    0
-  )
-    .fromTo(
-      Text1.chars,
-      { y: 80 },
-      {
-        duration: 1.2,
-        ease: "power3.inOut",
-        y: 0,
-        stagger: 0.1,
-        delay: delay2,
-      },
-      1
-    )
-    .fromTo(
-      Text1.chars,
-      { y: 0 },
-      {
-        y: -80,
-        duration: 1.2,
-        ease: "power3.inOut",
-        stagger: 0.1,
-        delay: delay,
-      },
-      0
-    )
-    .to(
-      Text2.chars,
-      {
-        y: -80,
-        duration: 1.2,
-        ease: "power3.inOut",
-        stagger: 0.1,
-        delay: delay2,
-      },
-      1
-    );
+  // Hide second initially
+  gsap.set(second, { y: 100, opacity: 0, visibility: 'hidden' });
+
+  tl.to(first, {
+    y: -100,
+    opacity: 0,
+    duration: duration,
+    ease: ease,
+    onComplete: () => gsap.set(first, { visibility: 'hidden' })
+  })
+  .to(second, {
+    visibility: 'visible',
+    y: 0,
+    opacity: 1,
+    duration: duration,
+    ease: ease,
+  }, "-=0.2") // Small overlap but only during the slide phase
+  .to(second, {
+    y: -100,
+    opacity: 0,
+    duration: duration,
+    ease: ease,
+    delay: 2,
+    onComplete: () => gsap.set(second, { visibility: 'hidden' })
+  })
+  .to(first, {
+    visibility: 'visible',
+    y: 0,
+    opacity: 1,
+    duration: duration,
+    ease: ease,
+  }, "-=0.2");
 }
