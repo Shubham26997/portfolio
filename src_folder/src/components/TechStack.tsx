@@ -26,11 +26,14 @@ type TechNodeProps = {
   total: number;
   item: { name: string; url: string };
   isActive: boolean;
+  activeTapIndex: number | null;
+  onTap: (index: number | null) => void;
 };
 
-function TechNode({ index, total, item, isActive }: TechNodeProps) {
+function TechNode({ index, total, item, isActive, activeTapIndex, onTap }: TechNodeProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const [hovered, setHover] = useState(false);
+  const tapped = activeTapIndex === index;
 
   const angle = (index / total) * Math.PI * 2;
   const texture = useMemo(() => textureLoader.load(item.url), [item.url]);
@@ -66,19 +69,22 @@ function TechNode({ index, total, item, isActive }: TechNodeProps) {
     meshRef.current.rotation.x = Math.PI / 2;
     meshRef.current.rotation.y = t * 0.5;
 
-    const targetScale = hovered ? 1.5 : 1;
+    const active = hovered || tapped;
+    const targetScale = active ? 1.5 : 1;
     meshRef.current.scale.lerp(
       new THREE.Vector3(targetScale, targetScale, targetScale),
       0.15
     );
 
-    const targetEmissive = hovered ? 0.9 : 0.15;
+    const targetEmissive = active ? 0.9 : 0.15;
     material.emissiveIntensity = THREE.MathUtils.lerp(
       material.emissiveIntensity,
       targetEmissive,
       0.1
     );
   });
+
+  const showLabel = hovered || tapped;
 
   return (
     <mesh
@@ -88,16 +94,23 @@ function TechNode({ index, total, item, isActive }: TechNodeProps) {
       castShadow
       receiveShadow
       onPointerOver={(e) => {
+        if (e.pointerType === "touch") return;
         e.stopPropagation();
         document.body.style.cursor = "pointer";
         setHover(true);
       }}
-      onPointerOut={() => {
+      onPointerOut={(e) => {
+        if (e.pointerType === "touch") return;
         document.body.style.cursor = "auto";
         setHover(false);
       }}
+      onPointerDown={(e) => {
+        if (e.pointerType !== "touch") return;
+        e.stopPropagation();
+        onTap(tapped ? null : index);
+      }}
     >
-      {hovered && (
+      {showLabel && (
         <Html
           distanceFactor={15}
           position={[0, 0, 1.8]}
@@ -106,12 +119,16 @@ function TechNode({ index, total, item, isActive }: TechNodeProps) {
           style={{
             color: "#00f0ff",
             fontWeight: "900",
-            fontSize: "18px",
+            fontSize: "14px",
             letterSpacing: "2px",
-            textShadow:
-              "0px 0px 10px #00f0ff, 0px 0px 20px #00f0ff, 0px 0px 30px #00f0ff",
+            textShadow: "0px 0px 8px #00f0ff",
             pointerEvents: "none",
             whiteSpace: "nowrap",
+            background: "rgba(10, 25, 47, 0.85)",
+            border: "1px solid rgba(0, 240, 255, 0.4)",
+            padding: "4px 10px",
+            borderRadius: "6px",
+            backdropFilter: "blur(6px)",
           }}
         >
           {item.name}
@@ -123,6 +140,11 @@ function TechNode({ index, total, item, isActive }: TechNodeProps) {
 
 const TechStack = () => {
   const [isActive, setIsActive] = useState(false);
+  const [activeTapIndex, setActiveTapIndex] = useState<number | null>(null);
+
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+  const canvasHeight = isMobile ? 340 : 500;
+  const groupTiltX = isMobile ? 0.15 : 0.4;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -142,19 +164,20 @@ const TechStack = () => {
       className="techstack"
       style={{
         position: "relative",
-        paddingTop: "80px",
-        paddingBottom: "100px",
+        paddingTop: isMobile ? "40px" : "80px",
+        paddingBottom: isMobile ? "40px" : "100px",
         textAlign: "center",
       }}
     >
       <h2
         style={{
-          fontSize: "64px",
+          fontSize: isMobile ? "40px" : "64px",
           fontWeight: "800",
           letterSpacing: "4px",
           color: "#cfd6e6",
-          marginBottom: "40px",
+          marginBottom: "24px",
           position: "relative",
+          top: 0,
           zIndex: 10,
         }}
       >
@@ -165,7 +188,7 @@ const TechStack = () => {
         style={{
           position: "relative",
           width: "100%",
-          height: "500px",
+          height: `${canvasHeight}px`,
           opacity: isActive ? 1 : 0,
           transition: "opacity 1.2s ease",
         }}
@@ -190,8 +213,7 @@ const TechStack = () => {
 
           <directionalLight position={[-5, 5, 5]} intensity={4} />
 
-          {/* FINAL POSITION FIX */}
-          <group rotation={[0.4, 0, 0]} position={[0, -0.5, 0]}>
+          <group rotation={[groupTiltX, 0, 0]} position={[0, -0.5, 0]}>
             {techData.map((item, i) => (
               <TechNode
                 key={i}
@@ -199,6 +221,8 @@ const TechStack = () => {
                 total={techData.length}
                 item={item}
                 isActive={isActive}
+                activeTapIndex={activeTapIndex}
+                onTap={setActiveTapIndex}
               />
             ))}
           </group>

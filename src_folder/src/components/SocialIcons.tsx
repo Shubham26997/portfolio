@@ -6,11 +6,6 @@ import "./styles/SocialIcons.css";
 import { TbNotes } from "react-icons/tb";
 import { useEffect, useState } from "react";
 import HoverLinks from "./HoverLinks";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
-
 const SocialIcons = () => {
   const [scrolled, setScrolled] = useState(false);
 
@@ -19,14 +14,6 @@ const SocialIcons = () => {
       setScrolled(window.scrollY > 150);
     };
     window.addEventListener("scroll", onScroll);
-
-    ScrollTrigger.create({
-      trigger: ".contact-section",
-      start: "top 80%",
-      onEnter: () => setScrolled(true), // Ensure hide state
-      onLeaveBack: () => setScrolled(window.scrollY > 150),
-    });
-
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
@@ -83,24 +70,8 @@ const SocialIcons = () => {
     return () => cleanupFns.forEach((fn) => fn());
   }, []);
 
-  const [isAtBottom, setIsAtBottom] = useState(false);
-
-  useEffect(() => {
-    const checkBottom = () => {
-      const scrollY = window.scrollY || document.documentElement.scrollTop;
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight;
-      
-      // Hide if within 60px of the bottom
-      setIsAtBottom(scrollY + windowHeight >= documentHeight - 60);
-    };
-
-    window.addEventListener("scroll", checkBottom);
-    return () => window.removeEventListener("scroll", checkBottom);
-  }, []);
-
   return (
-    <div className={`icons-section ${scrolled ? "scrolled" : ""} ${isAtBottom ? "at-bottom" : ""}`}>
+    <div className={`icons-section ${scrolled ? "scrolled" : ""}`}>
       <div className="social-pill" data-cursor="icons" id="social">
         <a href="https://github.com/Shubham26997" target="_blank" aria-label="GitHub">
           <FaGithub />

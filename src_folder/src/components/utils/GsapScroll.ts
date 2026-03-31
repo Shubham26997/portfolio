@@ -137,8 +137,6 @@ export function setCharTimeline(
       trigger: ".contact-section",
       start: "top 70%",
       onEnter: () => {
-        gsap.killTweensOf(".character-model");
-
         setContactWaveActive(true);
 
         gsap.set(".character-model", {

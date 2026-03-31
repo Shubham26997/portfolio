@@ -105,25 +105,23 @@ div.resume-button span {
 @media only screen and (min-width: 768px) {
   .resume-button {
     transform: none;
-    font-size: 18px;
-    bottom: 40px;
-    right: 0;
-    padding: 0;
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    color: #5e5e5e;
+    font-size: 14px;
+    bottom: 25px;
+    right: 20px;
+    padding: 10px 15px;
+    background: var(--backgroundColor);
+    border: 1px solid var(--accentColor);
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.25);
+    color: #fff;
+    border-radius: 5px;
+  }
+  .resume-button:hover {
+    box-shadow: 0 0 25px rgba(16, 185, 129, 0.5);
+    border-color: var(--accentColor);
+    color: #fff;
   }
   div.resume-button span {
-    font-size: 23px;
-    margin-top: -1.5px;
+    font-size: 17px;
+    margin-top: -1px;
   }
-}
-
-.icons-section.at-bottom .social-pill,
-.icons-section.at-bottom .resume-button {
-  opacity: 0 !important;
-  pointer-events: none !important;
-  transform: translateY(20px);
-  transition: all 0.5s ease;
 }
