@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { FaRegCopy, FaCheck } from "react-icons/fa6";
+import { FaRegCopy, FaCheck, FaGithub, FaLinkedinIn } from "react-icons/fa6";
 import { MdArrowOutward, MdCopyright, MdLock, MdLockOpen } from "react-icons/md";
+import { TbNotes } from "react-icons/tb";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "./styles/Contact.css";
@@ -186,14 +187,20 @@ const Contact = () => {
         </h2>
 
         <div className="contact-portal-layout">
-          {/* Left: Card */}
+          {/* Card */}
           <div className="contact-portal-card" ref={cardRef}>
             <div className="portal-glow"></div>
+
             <div className="portal-content">
               <div className="portal-main">
                 <span className="portal-label">Primary Channel</span>
                 <div className="portal-identity">
-                  <h3 className="portal-name">Shubham Goel</h3>
+                  <div className="portal-name-row">
+                    <h3 className="portal-name">Shubham Goel</h3>
+                    <div className="portal-avatar-section">
+                      <img src={import.meta.env.BASE_URL + "images/avatar.png"} alt="Shubham Goel" className="portal-avatar" />
+                    </div>
+                  </div>
 
                   {/* Designation — click the lock to reveal company */}
                   <div
@@ -240,6 +247,24 @@ const Contact = () => {
                   <span className="portal-label">Location</span>
                   <p className="portal-text">India, Noida &middot; Open to Remote</p>
                 </div>
+              </div>
+
+              {/* Social + Resume links baked into the card */}
+              <div className="portal-links">
+                <a href="https://github.com/Shubham26997" target="_blank" rel="noreferrer" className="portal-link-btn">
+                  <FaGithub /> GitHub
+                </a>
+                <a href="https://linkedin.com/in/shubhamgoel26" target="_blank" rel="noreferrer" className="portal-link-btn">
+                  <FaLinkedinIn /> LinkedIn
+                </a>
+                <a
+                  href={import.meta.env.BASE_URL + "Shubham_Goel_Resume.pdf"}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="portal-link-btn portal-link-resume"
+                >
+                  <TbNotes /> Resume
+                </a>
               </div>
             </div>
           </div>

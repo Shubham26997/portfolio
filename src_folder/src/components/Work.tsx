@@ -3,6 +3,7 @@ import "./styles/Work.css";
 import WorkImage from "./WorkImage";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useTiltAnimation } from "./utils/useTiltAnimation";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -52,6 +53,12 @@ const projects = [
 const Work = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Tilt animation on hover
+  useTiltAnimation(containerRef, ".work-tile", {
+    maxRotation: 10,
+    perspective: 1200,
+  });
+
   useEffect(() => {
     const prefersReducedMotion =
       typeof window !== "undefined" &&
@@ -82,6 +89,7 @@ const Work = () => {
           ease: "back.out(1.2)",
           scrollTrigger: {
             trigger: card,
+            scroller: ".main-body",
             start: "top 90%",
             end: "top 50%",
             scrub: 1.5,
@@ -101,6 +109,7 @@ const Work = () => {
           scale: 1,
           scrollTrigger: {
             trigger: card,
+            scroller: ".main-body",
             start: "top bottom",
             end: "bottom top",
             scrub: true,
@@ -118,7 +127,7 @@ const Work = () => {
     <div className="work-section" id="work" ref={containerRef}>
       <div className="work-container section-container">
         <h2 className="section-title">
-          Selected <span>Experiences</span>
+          Featured <span>Work</span>
         </h2>
 
         <div className="work-tiles-container">
@@ -130,23 +139,23 @@ const Work = () => {
                   <h4 className="tile-title">{project.title}</h4>
                   <p className="tile-category">{project.category}</p>
                   <div className="tile-summary">
-                    <p className="tile-paragraph">
+                    <div className="tile-paragraph">
                       <span className="tile-paragraph-label">Built</span>
-                      {project.built}
-                    </p>
-                    <p className="tile-paragraph">
+                      <span className="tile-paragraph-text">{project.built}</span>
+                    </div>
+                    <div className="tile-paragraph">
                       <span className="tile-paragraph-label">Architected</span>
-                      {project.approach}
-                    </p>
-                    <p className="tile-paragraph">
+                      <span className="tile-paragraph-text">{project.approach}</span>
+                    </div>
+                    <div className="tile-paragraph">
                       <span className="tile-paragraph-label">Impact</span>
-                      {project.impact}
-                    </p>
+                      <span className="tile-paragraph-text">{project.impact}</span>
+                    </div>
                   </div>
                   
                   <div className="tile-tools">
                     <span className="tools-label">Stack:</span>
-                    <p>{project.tools}</p>
+                    <span className="tools-text">{project.tools}</span>
                   </div>
                 </div>
                 

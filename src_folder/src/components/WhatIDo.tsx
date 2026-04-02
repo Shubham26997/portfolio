@@ -1,8 +1,18 @@
+import { useRef } from "react";
 import "./styles/WhatIDo.css";
+import { useTiltAnimation } from "./utils/useTiltAnimation";
 
 const WhatIDo = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Tilt animation on hover
+  useTiltAnimation(containerRef, ".what-card", {
+    maxRotation: 8,
+    perspective: 1200,
+  });
+
   return (
-    <div className="whatIDO">
+    <div className="whatIDO" ref={containerRef}>
       <div className="whatIDO-header">
         <h2 className="whatIDO-title">
           W<span className="hat-h2">HAT</span>{" "}

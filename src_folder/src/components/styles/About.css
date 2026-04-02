@@ -1,19 +1,21 @@
+/* Full-width snap tile */
 .about-section {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--backgroundColor);
   display: flex;
   align-items: center;
-  justify-content: left;
-  place-items: center;
+  justify-content: center;
   position: relative;
-  opacity: 1;
-  height: auto;
-  width: var(--cWidth);
-  margin: auto;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
+
+/* Narrow content inside the full-width tile */
 .about-me {
-  padding: 50px 0px;
-  padding-bottom: 0;
-  width: 500px;
-  max-width: calc(100% - 15px);
+  width: var(--cWidth);
+  max-width: 860px;
+  padding: 80px 0;
 }
 .about-me h3 {
   font-size: 25px;
@@ -31,39 +33,22 @@
   color: var(--textColor);
 }
 
-@media only screen and (min-width: 600px) {
+@media only screen and (max-width: 767px) {
   .about-section {
-    justify-content: center;
+    min-height: auto;
   }
-}
-@media only screen and (min-width: 768px) {
   .about-me {
-    width: 500px;
-    max-width: calc(100% - 70px);
-    transform: translateY(0%);
-  }
-  .about-section {
-    opacity: 1;
+    padding: 60px 0;
   }
 }
+
 @media only screen and (min-width: 1025px) {
-  .about-section {
-    width: var(--cWidth);
-    justify-content: right;
-    max-width: 1920px;
-    height: var(--vh);
-    padding: 0px;
-    opacity: 1;
-  }
-  .about-me {
-    padding: 0px;
-    width: 50%;
-  }
   .about-me p {
-    font-size: clamp(16px, 1.9vw, 26px);
+    font-size: clamp(16px, 1.5vw, 22px);
     line-height: 1.65;
   }
 }
+
 @media only screen and (min-width: 1950px) {
   .about-me p {
     font-size: 1.6rem;

@@ -6,7 +6,6 @@
    500   fixed utility elements (social pill, resume btn)
    1000  fixed navigation
    2000  modals & overlays
-   10000 loading screen (topmost until dismissed)
 ─────────────────────────────────────────────────────── */
 
 :root {
@@ -94,14 +93,12 @@ body::before {
 }
 
 body {
-  overflow-x: hidden;
+  overflow: hidden; /* prevent body from becoming the scroll container */
   margin: 0;
-  height: auto;
+  height: 100vh;
   background-color: var(--backgroundColor);
-  flex-grow: 1;
   --cWidth: calc(100% - 30px);
   --cMaxWidth: 1920px;
-  max-width: 100vw;
 }
 
 /* ── Focus styles — keyboard navigation ── */
@@ -111,9 +108,20 @@ body {
   border-radius: 4px;
 }
 
+/* main-body IS the scroll container — snap lives here */
 .main-body {
-  max-width: 100vw;
+  width: 100vw;
+  height: 100vh;
   overflow-x: hidden;
+  overflow-y: scroll;
+  overscroll-behavior-y: none;
+}
+
+/* Snap only on wide screens */
+@media screen and (min-width: 768px) {
+  .main-body {
+    scroll-snap-type: y mandatory;
+  }
 }
 
 .container-main {
@@ -169,6 +177,7 @@ body {
   html,
   body {
     scroll-behavior: auto;
+    scroll-snap-type: none;
   }
 
   *,

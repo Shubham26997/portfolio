@@ -12,6 +12,8 @@
   justify-content: center;
   padding: 80px 0;
   box-sizing: border-box;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 
 /* Full-bleed background — extends behind the fixed character (z:15) even though
@@ -32,7 +34,7 @@
 .whatIDO-header {
   width: 100%;
   text-align: center;
-  margin-bottom: 70px;
+  margin-bottom: 48px;
 }
 
 .whatIDO-title {
@@ -75,9 +77,11 @@
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 20px;
   padding: 48px 44px;
-  transition: border-color var(--t-slow), box-shadow var(--t-slow), transform var(--t-slow);
+  transition: border-color var(--t-slow), box-shadow var(--t-slow);
   overflow: hidden;
   cursor: default;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .what-card::before {
@@ -203,10 +207,16 @@
 }
 
 /* ── Responsive ── */
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 767px) {
   .whatIDO {
     min-height: auto;
-    padding: 60px 0;
+    padding: 50px 0;
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .whatIDO {
+    padding: 50px 0;
   }
 
   .whatIDO-grid {

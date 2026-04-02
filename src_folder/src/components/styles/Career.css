@@ -6,12 +6,15 @@
   justify-content: center;
   position: relative;
   opacity: 1;
+  min-height: 100vh;
   height: auto;
   margin: auto;
-  margin-bottom: 80px;
-  padding: 120px 0px;
+  margin-bottom: 0;
+  padding: 80px 0px;
   z-index: 16;
   background-color: var(--backgroundColor);
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 
 .career-section h2 {
@@ -19,13 +22,13 @@
   line-height: normal;
   font-weight: 800;
   text-align: center;
-  color: var(--headingColor); /* fallback for unsupported browsers */
+  color: var(--headingColor);
   background: linear-gradient(0deg, var(--accentSecondary), var(--headingColor));
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-top: 50px;
-  margin-bottom: 60px;
+  margin-top: 0;
+  margin-bottom: 48px;
 }
 
 .career-section h2>span {
@@ -42,22 +45,35 @@
 
 .career-info-box {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
+  align-items: flex-start;
+  gap: 60px;
   margin-bottom: 50px;
 }
 
-.career-info-box p {
-  width: 40%;
-  font-size: 18px;
-  font-weight: 300;
-  margin: 0;
-}
-
+/* Left column: role + date */
 .career-info-in {
   display: flex;
+  flex-direction: column;
   width: 40%;
-  justify-content: space-between;
-  gap: 50px;
+  flex-shrink: 0;
+  gap: 4px;
+}
+
+.career-role {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Right column: description */
+.career-info-box p {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 300;
+  margin: 0;
+  line-height: 1.7;
+  padding-top: 4px;
 }
 
 .career-info h3 {
@@ -84,18 +100,27 @@
   color: var(--accentColor);
 }
 
+/* Date sits below role/company in the left column */
+.career-info-in > h5 {
+  white-space: nowrap;
+  text-align: left;
+  margin-top: 4px;
+}
+
+/* Timeline line sits between left (40%) and right column — at the gap midpoint */
 .career-timeline {
   position: absolute;
-  top: -50px;
-  left: 50%;
+  top: 0;
+  left: calc(40% + 30px); /* midpoint of the 60px gap */
   transform: translateX(-50%);
-  width: 3px;
+  width: 2px;
   height: 100%;
   background-image: linear-gradient(to top,
       #14b8a6 20%,
       var(--accentColor) 50%,
       transparent 95%);
   max-height: 0%;
+  pointer-events: none;
 }
 
 .career-dot {
@@ -142,7 +167,6 @@
   .career-info h4 {
     font-size: 22px;
     line-height: 24px;
-    width: 180px;
   }
 
   .career-info h5 {
@@ -158,20 +182,24 @@
   }
 
   .career-info-in {
-    width: 45%;
     gap: 20px;
   }
 
-  .career-info-box p {
-    width: 45%;
+  .career-info-in > h5 {
+    font-size: 15px;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .career-section {
+    min-height: auto;
   }
 }
 
 @media only screen and (max-width: 1025px) {
   .career-section {
-    padding: 70px 20px;
-    padding-top: 150px;
-    margin-top: -100px;
+    padding: 50px 20px;
+    margin-top: 0;
     margin-bottom: 0;
   }
   .career-section h2 {
@@ -183,23 +211,33 @@
 @media only screen and (max-width: 900px) {
   .career-info-box {
     flex-direction: column;
-    gap: 10px;
-    margin-bottom: 70px;
+    gap: 12px;
+    margin-bottom: 48px;
   }
 
-  .career-info-in,
-  .career-info-box p {
+  .career-info-in {
     width: 100%;
-    padding-left: 10%;
-    box-sizing: border-box;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-left: 0;
+  }
+
+  .career-info-box p {
+    font-size: 14px;
+    padding-left: 0;
   }
 
   .career-timeline {
-    left: 0%;
+    display: none; /* hide line on mobile — stacked layout has no gap to put it in */
   }
 
   .career-container {
     width: calc(100% - 25px);
+  }
+
+  .career-info-in > h5 {
+    font-size: 14px;
   }
 }
 
@@ -216,24 +254,27 @@
   }
 
   .career-info-in {
-    gap: 0px;
+    gap: 12px;
+    padding-left: 5%;
   }
 
   .career-info h3 {
     font-size: 33px;
   }
 
-  .career-info-in,
   .career-info-box p {
     padding-left: 5%;
   }
 
   .career-section {
-    padding-top: 90px;
-    margin-top: -70px;
-
+    padding: 40px 0;
+    margin-top: 0;
     align-items: start;
     place-items: inherit;
     justify-content: left;
+  }
+
+  .career-info-in > h5 {
+    font-size: 13px;
   }
 }

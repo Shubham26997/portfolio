@@ -7,16 +7,28 @@ import { TbNotes } from "react-icons/tb";
 import { useEffect, useState } from "react";
 import HoverLinks from "./HoverLinks";
 const SocialIcons = () => {
-  const [scrolled, setScrolled] = useState(false);
+  // "visible" = past hero; "contact" = at final section → hide floating icons
+  const [visible, setVisible] = useState(false);
+  const [atContact, setAtContact] = useState(false);
 
   useEffect(() => {
+    const scroller = document.querySelector(".main-body") as HTMLElement;
+    if (!scroller) return;
+
     const onScroll = () => {
-      setScrolled(window.scrollY > 150);
+      const scrollY = scroller.scrollTop;
+      const totalH = scroller.scrollHeight;
+      const viewH  = scroller.clientHeight;
+
+      // Show after scrolling past ~80% of first section
+      setVisible(scrollY > viewH * 0.8);
+
+      // Hide when within last section (contact)
+      setAtContact(scrollY + viewH >= totalH - viewH * 0.4);
     };
-    window.addEventListener("scroll", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-    };
+
+    scroller.addEventListener("scroll", onScroll);
+    return () => scroller.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
@@ -71,7 +83,7 @@ const SocialIcons = () => {
   }, []);
 
   return (
-    <div className={`icons-section ${scrolled ? "scrolled" : ""}`}>
+    <div className={`icons-section ${visible ? "si-visible" : ""} ${atContact ? "si-hidden" : ""}`}>
       <div className="social-pill" data-cursor="icons" id="social">
         <a href="https://github.com/Shubham26997" target="_blank" aria-label="GitHub">
           <FaGithub />

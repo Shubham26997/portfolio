@@ -3,12 +3,14 @@
   z-index: 16;
   background-color: var(--backgroundColor);
   padding: 80px 5%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 
 .section-title {
   font-size: 60px;
   font-weight: 800;
-  margin-bottom: 80px;
+  margin-bottom: 56px;
   text-align: center;
 }
 
@@ -26,13 +28,15 @@
 .work-tile {
   width: 100%;
   position: relative;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .tile-content {
   display: flex;
   align-items: center;
   gap: 80px;
-  width: 100%;
+  width: 120%;
 }
 
 .tile-info {
@@ -78,29 +82,48 @@
 
 .tile-summary {
   margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
 .tile-paragraph {
-  font-size: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 0;
+  font-size: 13px;
+}
+
+.tile-paragraph-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  font-weight: 800;
+  color: var(--accentColor);
+  opacity: 0.85;
+}
+
+.tile-paragraph-label::before {
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 2px;
+  background: var(--accentColor);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.tile-paragraph-text {
+  font-size: 15px;
   line-height: 1.7;
   color: #ccd6f6;
   font-weight: 400;
   opacity: 0.9;
-  margin: 0 0 12px 0;
-}
-
-.tile-paragraph:last-child {
-  margin-bottom: 0;
-}
-
-.tile-paragraph-label {
-  display: inline-block;
-  margin-right: 10px;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  font-weight: 800;
-  color: var(--accentColor);
+  padding-left: 26px;
 }
 
 .tile-tools {
@@ -110,7 +133,7 @@
 }
 
 .tools-label {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 700;
   text-transform: uppercase;
   color: var(--accentColor);
@@ -189,8 +212,8 @@
     font-size: 16px;
   }
 
-  .tile-paragraph {
-    font-size: 16px;
+  .tile-paragraph-text {
+    font-size: 15px;
   }
 }
 

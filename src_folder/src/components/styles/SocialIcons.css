@@ -3,9 +3,24 @@
   max-width: var(--cMaxWidth);
   width: var(--cWidth);
   bottom: 0;
-  z-index: 500; /* fixed utility layer */
+  z-index: 500;
   left: 50%;
   transform: translateX(-50%);
+  /* Hidden by default on landing */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.icons-section.si-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Fade out when reaching contact section */
+.icons-section.si-hidden {
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 .social-pill {
   position: absolute;
