@@ -52,12 +52,6 @@ export function setAllTimeline() {
         0
       );
 
-    if (window.innerWidth > 1024) {
-      careerTimeline.to(".career-section", {
-        y: "20%",
-        duration: 0.5,
-      });
-    }
   });
 
   return () => ctx.revert();

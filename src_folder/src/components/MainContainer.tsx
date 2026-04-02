@@ -14,7 +14,6 @@ const TechStack = lazy(() => import("./TechStack"));
 
 const MainContainer = () => {
   useEffect(() => {
-    document.body.style.overflowY = "auto";
     setSplitText();
     setAllTimeline();
 

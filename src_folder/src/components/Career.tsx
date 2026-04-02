@@ -21,7 +21,7 @@ const Career = () => {
               <h5>2020</h5>
             </div>
             <p>
-              Graduated with a CGPA of 9.67/10. Built strong foundations in problem solving and complex systems engineering.
+              Graduated with a <strong>CGPA of 9.67/10.</strong> Built strong foundations in problem solving and complex systems engineering.
             </p>
           </div>
           <div className="career-info-box">
