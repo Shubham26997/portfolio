@@ -10,7 +10,6 @@ const techData: TechItem[] = [
   { name: "Python",     url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" },
   { name: "Django",     url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/django/django-plain.svg",         invert: true },
   { name: "FastAPI",    url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/fastapi/fastapi-original.svg" },
-  { name: "Celery",     url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/celery/celery-plain.svg" },
   { name: "Kafka",      url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/apachekafka/apachekafka-original.svg", invert: true },
   { name: "Docker",     url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg" },
   { name: "PostgreSQL", url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg" },
