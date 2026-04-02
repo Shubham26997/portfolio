@@ -5,6 +5,10 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function setSplitText() {
   ScrollTrigger.config({ ignoreMobileResize: true });
+
+  // main-body is the scroll container — must be set before creating any triggers
+  ScrollTrigger.defaults({ scroller: ".main-body" });
+
   if (window.innerWidth < 900) return;
   const paras = document.querySelectorAll(".para");
   const titles = document.querySelectorAll(".title");
@@ -14,7 +18,7 @@ export default function setSplitText() {
 
   paras.forEach((para) => {
     para.classList.add("visible");
-    
+
     gsap.fromTo(
       para,
       { autoAlpha: 0, y: 80 },
@@ -24,6 +28,7 @@ export default function setSplitText() {
           trigger: para.parentElement?.parentElement,
           toggleActions: ToggleAction,
           start: TriggerStart,
+          scroller: ".main-body",
         },
         duration: 1,
         ease: "power3.out",
@@ -31,7 +36,7 @@ export default function setSplitText() {
       }
     );
   });
-  
+
   titles.forEach((title) => {
     gsap.fromTo(
       title,
@@ -42,6 +47,7 @@ export default function setSplitText() {
           trigger: title.parentElement?.parentElement,
           toggleActions: ToggleAction,
           start: TriggerStart,
+          scroller: ".main-body",
         },
         duration: 0.8,
         ease: "power2.inOut",
